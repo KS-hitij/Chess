@@ -63,7 +63,7 @@ export default function Game() {
             if (socket)
                 socket.close();
         }
-    }, [])
+    }, [params.roomId,router])
     if (loading) {
         return (
             <div className="h-screen w-screen gap-y-4 flex flex-col justify-center items-center">
