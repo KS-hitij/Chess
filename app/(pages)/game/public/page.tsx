@@ -4,6 +4,16 @@ import ChessBoard from "../../../components/ChessBoard";
 import GameOver from "../../../components/GamOver";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+type GameMessage = {
+    type:"win" | "lose" | "init_game" | "error" | "history",
+    payload:{
+        roomId?:string,
+        opponent?:string,
+        color?: string,
+        message?:string,
+        history?:string[]
+    }
+}
 export default function Game() {
     const router = useRouter();
     const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -16,7 +26,7 @@ export default function Game() {
     const [movesHistory, setMovesHistory] = useState<string[]>([]);
     const [opponentName,setOpponentName] = useState("");
     const [playerName,setPlayerName] = useState("");
-    async function changeRating(parsedData) {
+    async function changeRating(parsedData:GameMessage) {
         if (parsedData.type === "win") {
             await axios.put("/api/rating", { change: 30 });
         }else{
@@ -68,7 +78,7 @@ export default function Game() {
             if(socket)
                 socket.close();
         }
-    }, [router])
+    }, )
     if (loading) {
         return (
             <div className="h-screen w-screen gap-y-4 flex flex-col justify-center items-center">
