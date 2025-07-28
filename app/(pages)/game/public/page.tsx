@@ -41,7 +41,7 @@ export default function Game() {
             }else if(response.status==200){
                 setPlayerName(response.data.user.username);
             }
-            const ws = new WebSocket(process.env.BACKEND_URL || "ws://localhost:3001/");
+            const ws = new WebSocket(process.env.NEXT_PUBLIC_BACKEND_URL || "ws://localhost:3001/");
             setSocket(ws);
             ws.onopen = () => {
                 ws.send(JSON.stringify({ type: "join_public",name:response.data.user.username }));
