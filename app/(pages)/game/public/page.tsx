@@ -17,7 +17,7 @@ type GameMessage = {
 export default function Game() {
     const router = useRouter();
     const [socket, setSocket] = useState<WebSocket | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [roomId, setRoomId] = useState("");
     const [color, setColor] = useState<undefined | "white" | "black">(undefined);
     const [showToast, setShowToast] = useState(false);
@@ -26,6 +26,7 @@ export default function Game() {
     const [movesHistory, setMovesHistory] = useState<string[]>([]);
     const [opponentName,setOpponentName] = useState("");
     const [playerName,setPlayerName] = useState("");
+    const [connecting,setConnecting] = useState(true);
     async function changeRating(parsedData:GameMessage) {
         if (parsedData.type === "win") {
             await axios.put("/api/rating", { change: 30 });
@@ -42,6 +43,8 @@ export default function Game() {
                 setPlayerName(response.data.user.username);
             }
             const ws = new WebSocket(process.env.NEXT_PUBLIC_BACKEND_URL || "ws://localhost:3001/");
+            setConnecting(false);
+            setLoading(true);
             setSocket(ws);
             ws.onopen = () => {
                 ws.send(JSON.stringify({ type: "join_public",name:response.data.user.username }));
@@ -79,6 +82,14 @@ export default function Game() {
                 socket.close();
         }
     }, )
+    if(connecting){
+        return (
+            <div className="h-screen w-screen gap-y-4 flex flex-col justify-center items-center">
+                <h1 className="text-3xl font-semibold">Connecting To Server</h1>
+                <span className="loading loading-dots loading-xl"></span>
+            </div>
+        )
+    }
     if (loading) {
         return (
             <div className="h-screen w-screen gap-y-4 flex flex-col justify-center items-center">
