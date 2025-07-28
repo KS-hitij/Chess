@@ -4,7 +4,7 @@ import axios from "axios";
 import { getServerSession } from "next-auth";
 import SignInBtn from "./components/SignInBtn";
 import SignOutBtn from "./components/SignOutBtn";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "./api/auth/[...nextauth]/authOptions";
 export default async function Home() {
   const result = await axios.get(`https://newsapi.org/v2/everything?q="Chess Tournament"&sortBy=popularity&pageSize=4&apiKey=${process.env.NEWS_API_KEY}`);
   const articles = result.data.articles;
