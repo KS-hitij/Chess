@@ -30,7 +30,7 @@ export default function Game() {
             setSocket(ws);
             const roomId = params.roomId;
             ws.onopen = () => {
-                ws.send(JSON.stringify({ type: "join_private", payload: { roomId } }));
+                ws.send(JSON.stringify({ type: "join_private", payload: { roomId,name:response.data.user.username } }));
             }
             ws.onmessage = (data: MessageEvent) => {
                 const parsedData = JSON.parse(data.data);
@@ -63,7 +63,7 @@ export default function Game() {
             if (socket)
                 socket.close();
         }
-    }, [params.roomId])
+    }, )
     if (loading) {
         return (
             <div className="h-screen w-screen gap-y-4 flex flex-col justify-center items-center">

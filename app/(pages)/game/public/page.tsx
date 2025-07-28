@@ -42,12 +42,15 @@ export default function Game() {
             }else if(response.status==200){
                 setPlayerName(response.data.user.username);
             }
+            else{
+                router.push("/");
+            }
             const ws = new WebSocket(process.env.NEXT_PUBLIC_BACKEND_URL || "ws://localhost:3001/");
             setConnecting(false);
             setLoading(true);
             setSocket(ws);
             ws.onopen = () => {
-                ws.send(JSON.stringify({ type: "join_public",name:response.data.user.username }));
+                ws.send(JSON.stringify({ type: "join_public",payload:{name:response.data.user.username} }));
             }
             ws.onmessage = (data: MessageEvent) => {
                 const parsedData = JSON.parse(data.data);
