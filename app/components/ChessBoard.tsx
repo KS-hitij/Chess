@@ -1,7 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { Chessboard, ChessboardOptions } from "react-chessboard";
-import { Chess } from "chess.js";
+import { Chess, Square } from "chess.js";
+type ChessMove = {
+    from:string,
+    to:string
+}
 export default function ChessBoard({socket,roomId,color}:{socket:WebSocket,roomId:string,color:"white"|"black"|undefined}) {
     const chessGameRef = useRef(new Chess());
     const [chessPoition, setChessPosition] = useState(chessGameRef.current.fen());
@@ -24,7 +28,7 @@ export default function ChessBoard({socket,roomId,color}:{socket:WebSocket,roomI
         boardOrientation:color,
         onSquareClick:({ square })=> {
             if (activeSquare) {
-                const moves = getMoveOptions(activeSquare);
+                const moves:ChessMove[] = getMoveOptions(activeSquare as Square);
                 const foundMove = moves.find((move) => move.from === activeSquare && move.to === square);
                 if (foundMove) {
                     chessGameRef.current.move({
@@ -38,7 +42,7 @@ export default function ChessBoard({socket,roomId,color}:{socket:WebSocket,roomI
                     return;
                 }
             }
-            const moves = getMoveOptions(square);
+            const moves:ChessMove[] = getMoveOptions(square as Square);
             if (square !== activeSquare) {
                 if (moves.length === 0) {
                     setActiveSquare(null);
@@ -49,7 +53,7 @@ export default function ChessBoard({socket,roomId,color}:{socket:WebSocket,roomI
                 moves.forEach((move) => {
                     highlights[move.to] = {
                         background:
-                            chessGameRef.current.get(move.to)
+                            chessGameRef.current.get(move.to as Square)
                                 ? "radial-gradient(circle, rgba(255,0,0,0.6) 60%, transparent 60%)"
                                 : "radial-gradient(circle, rgba(0,0,0,0.3) 20%, transparent 20%)",
                         borderRadius: "50%",
@@ -68,7 +72,7 @@ export default function ChessBoard({socket,roomId,color}:{socket:WebSocket,roomI
                 return false;
             }
             if (sourceSquare && targetSquare) {
-                const moves = getMoveOptions(sourceSquare);
+                const moves:ChessMove[] = getMoveOptions(sourceSquare as Square);
                 const foundMove = moves.find((move) => move.from === sourceSquare && move.to === targetSquare);
                 if (foundMove) {
                     chessGameRef.current.move({
@@ -86,7 +90,7 @@ export default function ChessBoard({socket,roomId,color}:{socket:WebSocket,roomI
         }
     };
 
-    const getMoveOptions = (square: string) => {
+    const getMoveOptions = (square: Square) => {
         const moves = chessGameRef.current.moves({ square, verbose: true });
         return moves;
     }
