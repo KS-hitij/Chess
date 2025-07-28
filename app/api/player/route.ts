@@ -1,10 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import prisma from "@/app/lib/database/db";
 import { getServerSession } from "next-auth";
-import { error } from "console";
-import e from "express";
 
-export default async function GET(req:NextRequest){
+export default async function GET(req:Request){
     try{
         const session = await getServerSession();
     if(!session){
