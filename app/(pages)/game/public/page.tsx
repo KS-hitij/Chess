@@ -54,7 +54,6 @@ export default function Game() {
             JSON.stringify({
               type: "join_public",
               payload: {
-                roomId: params.roomId,
                 name: response.data.user.username,
               },
             })
@@ -86,8 +85,8 @@ export default function Game() {
                 setTimeout(() => {
                   setToastMessage(parsedData.payload.message);
                   setGameOver(true);
+                  updateRating(parsedData);
                 }, 700);
-                updateRating(parsedData)
                 break;
 
               case "history":
@@ -139,7 +138,7 @@ export default function Game() {
         socketRef.current.close();
       }
     };
-  }, [params.roomId, router, gameOver]);
+  }, [params.roomId, router]);
 
   if (loading) {
     return (
