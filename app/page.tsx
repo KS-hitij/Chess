@@ -4,7 +4,7 @@ import axios from "axios";
 import { getServerSession } from "next-auth";
 import SignInBtn from "./components/SignInBtn";
 import SignOutBtn from "./components/SignOutBtn";
-import { authOptions } from "./api/auth/authOptions";
+import { authOptions } from "./api/auth/[...nextauth]/authOptions";
 
 type Article = {
   source: {
