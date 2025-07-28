@@ -138,7 +138,7 @@ export default function Game() {
         socketRef.current.close();
       }
     };
-  }, [params.roomId, router]);
+  }, []);
 
   if (loading) {
     return (

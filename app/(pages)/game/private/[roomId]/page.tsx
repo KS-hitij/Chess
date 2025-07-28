@@ -125,7 +125,7 @@ export default function Game() {
         socketRef.current.close();
       }
     };
-  }, [params.roomId, router, gameOver]);
+  }, []);
 
   if (loading) {
     return (
