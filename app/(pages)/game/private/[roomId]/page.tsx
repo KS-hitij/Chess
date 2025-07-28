@@ -5,12 +5,6 @@ import GameOver from "../../../../components/GamOver";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 
-type WebSocketMessage = {
-  type: "init_game" | "error" | "win" | "lose" | "history";
-  payload: {
-    message:string
-  };
-};
 
 export default function Game() {
   const router = useRouter();
@@ -25,13 +19,6 @@ export default function Game() {
   const [movesHistory, setMovesHistory] = useState<string[]>([]);
   const [opponentName, setOpponentName] = useState("");
   const [playerName, setPlayerName] = useState("");
-    async function updateRating(parsedData:WebSocketMessage) {
-        if(parsedData.type==="win"){
-            await axios.put("/api/rating",{change:30});
-        }else{
-            await axios.put("/api/rating",{change:-30});
-        }
-    }
   useEffect(() => {
     let isMounted = true;
     const setUp = async () => {
@@ -87,7 +74,6 @@ export default function Game() {
                   setToastMessage(parsedData.payload.message);
                   setGameOver(true);
                 }, 700);
-                updateRating(parsedData)
                 break;
 
               case "history":
