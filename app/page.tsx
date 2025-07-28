@@ -52,7 +52,7 @@ export default async function Home() {
               <div key={article.url} className="card bg-base-100 w-80 shadow-md pb-2 mb-10 cursor-pointer hover:shadow-xl transition duration-300">
                 <Link href={article.url}>
                   <figure>
-                    <img height={150} width={200} src={article.urlToImage} alt="News" />
+                    <img height={150} width={200} loading="lazy"  src={article.urlToImage} alt="News" />
                   </figure>
                   <div className="card-body">
                     <p>{article.title}</p>
