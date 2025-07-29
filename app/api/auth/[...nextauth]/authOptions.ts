@@ -14,7 +14,7 @@ const authOptions:AuthOptions = {
             if (account?.provider === "google") {
                 const email = profile?.email;
                 const name = profile?.name;
-                const username = `${name}${crypto.randomUUID().split('-')[0]}`;
+                const username = `${name?.split(' ')[0]}${crypto.randomUUID().split('-')[0]}`;
                 try {
                     const existingUser = await prisma.user.findFirst({
                         where: { email }
