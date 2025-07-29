@@ -113,7 +113,6 @@ export default function Game() {
         };
 
         ws.onclose = () => {
-          setTimeout(() => {
             if (isMounted && gameOver.current === false) {
               setToastMessage("Connection closed");
               setShowToast(true);
@@ -122,7 +121,6 @@ export default function Game() {
                 setLoading(true);
               }, 1500);
             }
-          }, 700);
         };
       } catch (error) {
         console.error("Setup error:", error);
