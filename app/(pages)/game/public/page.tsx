@@ -118,7 +118,6 @@ export default function Game() {
               setShowToast(true);
               setTimeout(() => {
                 setShowToast(false);
-                setLoading(true);
               }, 1500);
             }
         };
