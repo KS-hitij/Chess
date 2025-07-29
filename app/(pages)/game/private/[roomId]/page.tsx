@@ -70,9 +70,9 @@ export default function Game() {
 
               case "win":
               case "lose":
+                setGameOver(true);
                 setTimeout(() => {
                   setToastMessage(parsedData.payload.message);
-                  setGameOver(true);
                 }, 700);
                 break;
 
