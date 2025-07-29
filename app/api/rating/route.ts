@@ -21,24 +21,13 @@ export async function PUT(req: NextRequest) {
         if (!existingUser) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
-        if (existingUser.rating === 0 && change < 0) {
-            return NextResponse.json({ message: "Rating Updated" }, { status: 200 });
-        }
-        if (existingUser.rating - change < 0) {
-            await prisma.user.update({
-                where: {
-                    email
-                },
-                data: { rating: 0 }
-            });
-            return NextResponse.json({ message: "Rating Updated" }, { status: 200 });
-        }
+        const newRating = Math.max(existingUser.rating+change,0);
         await prisma.user.update({
             where: {
                 email
             },
             data: {
-                rating: { increment: change }
+                rating: newRating
             }
         });
         return NextResponse.json({ message: "Rating Updated" }, { status: 200 });
