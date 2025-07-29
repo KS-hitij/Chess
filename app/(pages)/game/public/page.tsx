@@ -26,9 +26,9 @@ export default function Game() {
   const [playerName, setPlayerName] = useState("");
   async function updateRating(parsedData: WebSocketMessage) {
     if (parsedData.type === "win") {
-      await axios.put("/api/rating", { change: 30 });
+      await axios.put("/api/rating", { change: 30 },{ headers: { "Content-Type": "application/json" }});
     } else {
-      await axios.put("/api/rating", { change: -30 });
+      await axios.put("/api/rating", { change: -30 },{ headers: { "Content-Type": "application/json" }});
     }
   }
   useEffect(() => {
