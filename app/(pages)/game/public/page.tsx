@@ -105,11 +105,6 @@ export default function Game() {
 
         ws.onerror = (error) => {
           console.error("WebSocket error:", error);
-          if (isMounted) {
-            setToastMessage("Connection error");
-            setShowToast(true);
-            setTimeout(() => setShowToast(false), 1500);
-          }
         };
 
         ws.onclose = () => {
