@@ -82,10 +82,12 @@ export default function Game() {
               case "win":
               case "lose":
                 gameOver.current = true;
-                setTimeout(async () => {
+                updateRating(parsedData).then(() => {
                   setToastMessage(parsedData.payload.message);
-                  await updateRating(parsedData);
-                }, 700);
+                }).catch((err) => {
+                  console.error("Failed to update rating:", err);
+                  setToastMessage("Rating update failed.");
+                });
                 break;
 
               case "history":
