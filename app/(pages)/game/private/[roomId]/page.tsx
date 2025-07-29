@@ -98,14 +98,17 @@ export default function Game() {
         };
 
         ws.onclose = () => {
-          if (isMounted && !gameOver) {
-            setToastMessage("Connection closed");
-            setShowToast(true);
-            setTimeout(() => {
-              setShowToast(false);
-              setLoading(true);
-            }, 1500);
-          }
+          setTimeout(() => {
+            if (isMounted && !gameOver) {
+              setToastMessage("Connection closed");
+              setShowToast(true);
+              setTimeout(() => {
+                setShowToast(false);
+                setLoading(true);
+              }, 1500);
+            }
+          }, 800);
+
         };
       } catch (error) {
         console.error("Setup error:", error);
