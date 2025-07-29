@@ -88,6 +88,7 @@ export default function Game() {
                   setToastMessage("Rating update failed.");
                 }).finally(()=>{
                   gameOver.current = true;
+                  setToastMessage(parsedData.payload.message);
                 });
                 break;
 
