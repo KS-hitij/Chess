@@ -86,6 +86,7 @@ export default function Game() {
                   setToastMessage(parsedData.payload.message);
                 }).catch((err) => {
                   console.error("Failed to update rating:", err);
+                  setShowToast(true);
                   setToastMessage("Rating update failed.");
                 });
                 break;
