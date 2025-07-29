@@ -5,7 +5,7 @@ import prisma from "@/app/lib/database/db";
 export async function PUT(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
-        const change = await req.json();
+        const {change} = await req.json();
         if (!session) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
