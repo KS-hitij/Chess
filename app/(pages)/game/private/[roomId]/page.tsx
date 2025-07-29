@@ -15,7 +15,7 @@ export default function Game() {
   const [color, setColor] = useState<"white" | "black">();
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-  const [gameOver, setGameOver] = useState(false);
+  const gameOver = useRef(false);
   const [movesHistory, setMovesHistory] = useState<string[]>([]);
   const [opponentName, setOpponentName] = useState("");
   const [playerName, setPlayerName] = useState("");
@@ -70,7 +70,7 @@ export default function Game() {
 
               case "win":
               case "lose":
-                setGameOver(true);
+                gameOver.current = true;
                 setTimeout(() => {
                   setToastMessage(parsedData.payload.message);
                 }, 700);
@@ -99,7 +99,7 @@ export default function Game() {
 
         ws.onclose = () => {
           setTimeout(() => {
-            if (isMounted && !gameOver) {
+            if (isMounted && gameOver.current===false) {
               setToastMessage("Connection closed");
               setShowToast(true);
               setTimeout(() => {
@@ -108,7 +108,6 @@ export default function Game() {
               }, 1500);
             }
           }, 800);
-
         };
       } catch (error) {
         console.error("Setup error:", error);

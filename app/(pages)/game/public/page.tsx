@@ -2,36 +2,35 @@
 import { useState, useEffect, useRef } from "react";
 import ChessBoard from "../../../components/ChessBoard";
 import GameOver from "../../../components/GamOver";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 
 type WebSocketMessage = {
   type: "init_game" | "error" | "win" | "lose" | "history";
   payload: {
-    message:string
+    message: string
   };
 };
 
 export default function Game() {
   const router = useRouter();
-  const params = useParams();
   const socketRef = useRef<WebSocket | null>(null);
   const [loading, setLoading] = useState(true);
   const [roomId, setRoomId] = useState("");
   const [color, setColor] = useState<"white" | "black">();
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-  const [gameOver, setGameOver] = useState(false);
+  const gameOver = useRef(false);
   const [movesHistory, setMovesHistory] = useState<string[]>([]);
   const [opponentName, setOpponentName] = useState("");
   const [playerName, setPlayerName] = useState("");
-    async function updateRating(parsedData:WebSocketMessage) {
-        if(parsedData.type==="win"){
-            await axios.put("/api/rating",{change:30});
-        }else{
-            await axios.put("/api/rating",{change:-30});
-        }
+  async function updateRating(parsedData: WebSocketMessage) {
+    if (parsedData.type === "win") {
+      await axios.put("/api/rating", { change: 30 });
+    } else {
+      await axios.put("/api/rating", { change: -30 });
     }
+  }
   useEffect(() => {
     let isMounted = true;
     const setUp = async () => {
@@ -82,9 +81,9 @@ export default function Game() {
 
               case "win":
               case "lose":
-                setTimeout(async() => {
+                gameOver.current = true;
+                setTimeout(async () => {
                   setToastMessage(parsedData.payload.message);
-                  setGameOver(true);
                   await updateRating(parsedData);
                 }, 700);
                 break;
@@ -111,14 +110,16 @@ export default function Game() {
         };
 
         ws.onclose = () => {
-          if (isMounted && !gameOver) {
-            setToastMessage("Connection closed");
-            setShowToast(true);
-            setTimeout(() => {
-              setShowToast(false);
-              setLoading(true);
-            }, 1500);
-          }
+          setTimeout(() => {
+            if (isMounted && gameOver.current === false) {
+              setToastMessage("Connection closed");
+              setShowToast(true);
+              setTimeout(() => {
+                setShowToast(false);
+                setLoading(true);
+              }, 1500);
+            }
+          }, 700);
         };
       } catch (error) {
         console.error("Setup error:", error);
@@ -138,7 +139,7 @@ export default function Game() {
         socketRef.current.close();
       }
     };
-  }, []);
+  }, [router]);
 
   if (loading) {
     return (
