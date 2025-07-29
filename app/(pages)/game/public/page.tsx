@@ -81,8 +81,8 @@ export default function Game() {
 
               case "win":
               case "lose":
-                gameOver.current = true;
                 updateRating(parsedData).then(() => {
+                  gameOver.current = true;
                   setToastMessage(parsedData.payload.message);
                 }).catch((err) => {
                   console.error("Failed to update rating:", err);
