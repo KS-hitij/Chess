@@ -19,7 +19,7 @@ export default function Game() {
   const [roomId, setRoomId] = useState("");
   const [color, setColor] = useState<"white" | "black">();
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
+  const toastMessage = useRef("");
   const gameOver = useRef(false);
   const [movesHistory, setMovesHistory] = useState<string[]>([]);
   const [opponentName, setOpponentName] = useState("");
@@ -74,23 +74,23 @@ export default function Game() {
                 break;
 
               case "error":
-                setToastMessage(parsedData.payload.message);
+                toastMessage.current = (parsedData.payload.message);
                 setShowToast(true);
                 setTimeout(() => setShowToast(false), 1500);
                 break;
 
               case "win":
               case "lose":
+                toastMessage.current = (parsedData.payload.message);
                 updateRating(parsedData).then(() => {
-                  setToastMessage(parsedData.payload.message);
                   gameOver.current = true;
                 }).catch((err) => {
                   console.error("Failed to update rating:", err);
                   setShowToast(true);
-                  setToastMessage("Rating update failed.");
+                  toastMessage.current = ("Rating update failed.");
                 });
                 break;
-                
+
               case "history":
                 setMovesHistory(parsedData.payload.history);
                 break;
@@ -106,7 +106,7 @@ export default function Game() {
         ws.onerror = (error) => {
           console.error("WebSocket error:", error);
           if (isMounted) {
-            setToastMessage("Connection error");
+            toastMessage.current=("Connection error");
             setShowToast(true);
             setTimeout(() => setShowToast(false), 1500);
           }
@@ -114,7 +114,7 @@ export default function Game() {
 
         ws.onclose = () => {
             if (isMounted && gameOver.current === false) {
-              setToastMessage("Connection closed");
+              toastMessage.current=("Connection closed");
               setShowToast(true);
               setTimeout(() => {
                 setShowToast(false);
@@ -125,7 +125,7 @@ export default function Game() {
       } catch (error) {
         console.error("Setup error:", error);
         if (isMounted) {
-          setToastMessage("Failed to initialize game");
+          toastMessage.current=("Failed to initialize game");
           setShowToast(true);
           setTimeout(() => setShowToast(false), 1500);
         }
@@ -154,7 +154,7 @@ export default function Game() {
   if (gameOver.current) {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-base-300">
-        <GameOver message={toastMessage} />
+        <GameOver message={toastMessage.current} />
       </div>
     );
   }
@@ -186,7 +186,7 @@ export default function Game() {
         </div>
         <div className={`toast toast-top toast-end ${showToast ? "block" : "hidden"}`}>
           <div className="alert alert-error">
-            <span>{toastMessage}</span>
+            <span>{toastMessage.current}</span>
           </div>
         </div>
       </div>
