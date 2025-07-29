@@ -138,7 +138,7 @@ export default function Game() {
     );
   }
 
-  if (gameOver) {
+  if (gameOver.current) {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-base-300">
         <GameOver message={toastMessage} />
