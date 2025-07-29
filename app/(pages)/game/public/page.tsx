@@ -82,10 +82,10 @@ export default function Game() {
 
               case "win":
               case "lose":
-                setTimeout(() => {
+                setTimeout(async() => {
                   setToastMessage(parsedData.payload.message);
                   setGameOver(true);
-                  updateRating(parsedData);
+                  await updateRating(parsedData);
                 }, 700);
                 break;
 
