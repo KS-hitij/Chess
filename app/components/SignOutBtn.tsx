@@ -5,6 +5,6 @@ export default function SignOutBtn() {
         signOut({ callbackUrl: "/" });
     }
     return (
-        <button onClick={handleClick} type="button" className="btn btn-primary  rounded-xl hover:shadow-xl transition duration-300 lg:btn-lg">Sign Out</button>
+        <button onClick={handleClick} type="button" className="btn btn-primary  rounded-xl hover:shadow-xl transition duration-300 btn-sm lg:btn-lg">Sign Out</button>
     )
 }

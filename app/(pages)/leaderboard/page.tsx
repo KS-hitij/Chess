@@ -1,4 +1,5 @@
-import prisma from "@/app/lib/database/db"
+import prisma from "@/app/lib/database/db";
+import Link from "next/link";
 export default async function LeaderBoard() {
     const players = await prisma.user.findMany({
         select: {
@@ -11,9 +12,14 @@ export default async function LeaderBoard() {
         take: 10
     });
     return (
-        <div className="min-h-screen max-w-screen bg-base-300 overflow-x-hidden md:px-8 xl:px-90 pt-10">
+        <div className="min-h-screen max-w-screen bg-base-300 flex flex-col items-center overflow-x-hidden">
+            <div className="navbar w-full justify-center">
+                <div className="navbar-center">
+                    <Link href={"/"} ><button type="button" className="btn btn-primary rounded-xl hover:shadow-xl transition duration-300 btn-lg">Back To Home</button> </Link>
+                </div>
+            </div>
             <h1 className="text-5xl font-bold text-center">Top Players</h1>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto ">
                 <table className="table">
                     {/* head */}
                     <thead>
