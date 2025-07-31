@@ -28,7 +28,7 @@ export default async function Home() {
     <div className="min-h-screen max-w-screen bg-base-300 overflow-x-hidden">
       <div className="navbar border-b-1 border-gray-300  justify-between lg:px-20 mb-10 lg:mb-20">
         <div className="flex navbar-start h-full items-center">
-          <h1 className="text-2xl lg:text-4xl font-bold">Chess</h1>
+          <h1 className="text-2xl lg:text-4xl font-bold">{session?.user?`Welcome ${session.user.name}`:`Welcome Guest`}</h1>
         </div>
         <div className="flex h-full navbar-end items-center gap-x-4">
           {session?<SignOutBtn/>:<SignInBtn/>}

@@ -2,11 +2,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Chessboard, ChessboardOptions } from "react-chessboard";
 import { Chess, Square } from "chess.js";
+import useSound from 'use-sound';
 type ChessMove = {
     from:string,
     to:string
 }
 export default function ChessBoard({socket,roomId,color}:{socket:WebSocket,roomId:string,color:"white"|"black"|undefined}) {
+    const [move] = useSound("/sounds/chess move.mp3");
+    const [check] = useSound("/sounds/check.mp3");
     const chessGameRef = useRef(new Chess());
     const [chessPoition, setChessPosition] = useState(chessGameRef.current.fen());
     const [activeSquare, setActiveSquare] = useState<string | null>(null);
@@ -15,8 +18,12 @@ export default function ChessBoard({socket,roomId,color}:{socket:WebSocket,roomI
         socket.addEventListener("message",(e:MessageEvent)=>{
             const data = JSON.parse(e.data);
             if(data.type==="board"){
+                move();
                 setChessPosition(data.payload.board);
                 chessGameRef.current.load(data.payload.board);
+            }
+            if(data.type==="check"){
+                check();
             }
         })
     },)
