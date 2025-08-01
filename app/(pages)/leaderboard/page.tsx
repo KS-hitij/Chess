@@ -1,5 +1,6 @@
 import prisma from "@/app/lib/database/db";
 import Link from "next/link";
+export const dynamic = "force-dynamic";
 export default async function LeaderBoard() {
     const players = await prisma.user.findMany({
         select: {

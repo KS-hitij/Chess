@@ -30,6 +30,7 @@ export default function Game() {
     } else {
       await axios.put("/api/rating", { change: -30 },{ headers: { "Content-Type": "application/json" }});
     }
+    console.log("Rating changed");
   }
   useEffect(() => {
     let isMounted = true;

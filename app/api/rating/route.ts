@@ -21,7 +21,7 @@ export async function PUT(req: NextRequest) {
         if (!existingUser) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
-        const newRating = await Math.max(existingUser.rating+change,0);
+        const newRating = Math.max(existingUser.rating+change,0);
         await prisma.user.update({
             where: {
                 email
